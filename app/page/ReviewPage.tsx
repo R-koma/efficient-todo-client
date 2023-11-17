@@ -1,36 +1,28 @@
 "use client";
 
-import React, { useRef } from "react";
-import Todo from "../components/Todo";
+import React, { useEffect } from "react";
 import { TodoType } from "../types";
-import { API_URL } from "@/constants/url";
-import { useTodos } from "../hooks/useTodos";
 import Review from "../components/Review";
+import { useReviews } from "../hooks/useReviews";
 
-const TodoPage = () => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const { todos, isLoading, error, mutate } = useTodos();
+const ReviewPage = () => {
+  const { reviews, isLoading, error, mutate } = useReviews();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      mutate();
+    }, 60000);
 
-    const response = await fetch(`${API_URL}/createTodo`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: inputRef.current?.value,
-        isCompleted: false,
-      }),
-    });
+    return () => clearInterval(intervalId);
+  }, [mutate]);
 
-    if (response.ok) {
-      const newTodo = await response.json();
-      mutate([...todos, newTodo]);
-      if (inputRef.current?.value) {
-        inputRef.current.value = "";
-      }
-    }
-  };
+  const filteredReviews =
+    reviews?.filter(
+      (review) =>
+        filteredReviews.nextReviewDate &&
+        new Date(review.nextReviewDate) <= new Date()
+    ) || [];
+
   return (
     <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-32 py-4 px-4">
       <div className="px-4 py-2">
@@ -38,34 +30,13 @@ const TodoPage = () => {
           Review List
         </h1>
       </div>
-      <form
-        className="w-full max-w-sm mx-auto px-4 py-2"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex items-center border-b-2 border-teal-500 py-2">
-          <input
-            className="appearance-none bg-transparent
-      border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight
-      focus:outline-none"
-            type="text"
-            placeholder="Add a task"
-            ref={inputRef}
-          />
-          <button
-            className="duration-150 flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-blue-700 text-sm border-4 text-white py-1 px-2 rounded"
-            type="submit"
-          >
-            Add
-          </button>
-        </div>
-      </form>
       <ul className="divide-y divide-gray-200 px-4">
-        {todos?.map((todo: TodoType) => (
-          <Review key={todo.id} review={review} />
+        {reviews?.map((review: TodoType) => (
+          <Review key={review.id} review={review} />
         ))}
       </ul>
     </div>
   );
 };
 
-export default TodoPage;
+export default ReviewPage;
