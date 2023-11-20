@@ -5,6 +5,8 @@ import Todo from "../components/Todo";
 import { TodoType } from "../types";
 import { API_URL } from "@/constants/url";
 import { useTodos } from "../hooks/useTodos";
+import Link from "next/link";
+import ReviewPage from "./ReviewPage";
 
 const TodoPage = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -31,20 +33,18 @@ const TodoPage = () => {
     }
   };
   return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-32 py-4 px-4">
+    <div className="max-w-md mx-auto bg-slate-800 shadow-lg rounded-lg overflow-hidden mt-32 py-4 px-4">
       <div className="px-4 py-2">
-        <h1 className="text-gray-800 font-bold text-2xl uppercase">
-          Todo List
-        </h1>
+        <h1 className="text-gray-50 font-bold text-2xl uppercase">Todo List</h1>
       </div>
       <form
         className="w-full max-w-sm mx-auto px-4 py-2"
         onSubmit={handleSubmit}
       >
-        <div className="flex items-center border-b-2 border-teal-500 py-2">
+        <div className="flex items-center border-b-2 border-white-900 py-2">
           <input
             className="appearance-none bg-transparent
-      border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight
+      border-none w-full text-gray-50 mr-3 py-1 px-2 leading-tight
       focus:outline-none"
             type="text"
             placeholder="Add a task"
@@ -63,6 +63,11 @@ const TodoPage = () => {
           <Todo key={todo.id} todo={todo} />
         ))}
       </ul>
+      <div>
+        <Link href="/">
+          <h2 className="w-full text-purple-800 font-bold">☞ REVIEW LIST</h2>
+        </Link>
+      </div>
     </div>
   );
 };

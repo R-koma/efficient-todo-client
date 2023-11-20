@@ -1,40 +1,86 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { TodoType } from "../types";
 import Review from "../components/Review";
-import { useReviews } from "../hooks/useReviews";
+import { API_URL } from "@/constants/url";
+import Link from "next/link";
 
 const ReviewPage = () => {
-  const { reviews, isLoading, error, mutate } = useReviews();
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      mutate();
-    }, 60000);
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`${API_URL}/allReviews`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setReviews(data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+    fetchReviews();
 
+    // 1分ごとにタスクを再取得
+    const intervalId = setInterval(fetchReviews, 60000);
     return () => clearInterval(intervalId);
-  }, [mutate]);
+  }, [reviews]);
 
-  const filteredReviews =
-    reviews?.filter(
-      (review) =>
-        filteredReviews.nextReviewDate &&
-        new Date(review.nextReviewDate) <= new Date()
-    ) || [];
+  const handleDelete = async (id: number) => {
+    const response = await fetch(`${API_URL}/deleteReview/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
 
+    if (response.ok) {
+      setReviews((prevReviews) =>
+        prevReviews.filter((review: TodoType) => review.id !== id)
+      );
+    }
+  };
+
+  // toggleTodoCompletion関数
+  const toggleTodoCompletion = async (id: number) => {
+    try {
+      const response = await fetch(`${API_URL}/reviewTime/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      setReviews((prevReviews) =>
+        prevReviews.filter((review: TodoType) => review.id !== id)
+      );
+    } catch (error) {
+      console.error("Error updating todo completion:", error);
+    }
+  };
   return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-32 py-4 px-4">
+    <div className="max-w-md mx-auto bg-slate-800 shadow-lg rounded-lg overflow-hidden mt-32 py-4 px-4">
       <div className="px-4 py-2">
-        <h1 className="text-gray-800 font-bold text-2xl uppercase">
+        <h1 className="text-gray-50 font-bold text-2xl uppercase">
           Review List
         </h1>
       </div>
-      <ul className="divide-y divide-gray-200 px-4">
-        {reviews?.map((review: TodoType) => (
-          <Review key={review.id} review={review} />
-        ))}
-      </ul>
+      <div>
+        <Review
+          reviews={reviews}
+          onDelete={handleDelete}
+          onComplete={toggleTodoCompletion}
+        />
+      </div>
+      <div>
+        <Link href="/">
+          <h2 className="text-purple-800 font-bold">☞ TODO LIST</h2>
+        </Link>
+      </div>
     </div>
   );
 };

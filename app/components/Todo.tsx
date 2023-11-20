@@ -67,11 +67,11 @@ const Todo = ({ todo }: TodoProps) => {
               id="todo1"
               name="todo1"
               type="checkbox"
-              className="h-4 w-4 text-teal-600 focus:ring-teal-500
+              className="h-4 w-4 text-teal-600 focus:ring-teal-500 
           border-gray-300 rounded"
               onClick={() => toggleTodoCompletion(todo.id)}
             />
-            <label className="ml-3 block text-gray-900">
+            <label className="ml-3 block text-gray-50">
               {isEditing ? (
                 <input
                   type="text"
@@ -89,7 +89,7 @@ const Todo = ({ todo }: TodoProps) => {
               onClick={handleEdit}
               className="duration-150 bg-green-600 hover:bg-green-700 text-white font-medium py-1 px-2 rounded"
             >
-              {isEditing ? "Save" : "✒"}
+              {isEditing ? "Save" : "✂︎"}
             </button>
             <button
               onClick={() => handleDelete(todo.id)}

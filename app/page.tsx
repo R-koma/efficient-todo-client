@@ -4,7 +4,7 @@ import ReviewPage from "./page/ReviewPage";
 export default function Home() {
   return (
     <>
-      <TodoPage />
+      {/* <TodoPage /> */}
       <ReviewPage />
     </>
   );
