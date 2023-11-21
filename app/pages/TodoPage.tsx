@@ -13,6 +13,10 @@ const TodoPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!inputRef.current?.value.trim()) {
+      return;
+    }
+
     const response = await fetch(`${API_URL}/createTodo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
