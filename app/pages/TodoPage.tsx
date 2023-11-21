@@ -6,7 +6,6 @@ import { TodoType } from "../types";
 import { API_URL } from "@/constants/url";
 import { useTodos } from "../hooks/useTodos";
 import Link from "next/link";
-import ReviewPage from "./ReviewPage";
 
 const TodoPage = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -63,11 +62,9 @@ const TodoPage = () => {
           <Todo key={todo.id} todo={todo} />
         ))}
       </ul>
-      <div>
-        <Link href="/">
-          <h2 className="w-full text-purple-800 font-bold">☞ REVIEW LIST</h2>
-        </Link>
-      </div>
+      {/* <Link href={`${API_URL}/allReviews`}>
+        <a className="w-full text-purple-800 font-bold">☞ REVIEW LIST</a>
+      </Link> */}
     </div>
   );
 };

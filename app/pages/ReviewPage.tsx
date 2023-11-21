@@ -77,9 +77,9 @@ const ReviewPage = () => {
         />
       </div>
       <div>
-        <Link href="/">
+        {/* <Link href="/">
           <h2 className="text-purple-800 font-bold">☞ TODO LIST</h2>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
