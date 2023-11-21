@@ -1,5 +1,5 @@
 import TodoPage from "./pages/TodoPage";
-import ReviewPage from "./pages/reviewpage";
+import ReviewPage from "./pages/ReviewPage";
 
 export default function Home() {
   return (

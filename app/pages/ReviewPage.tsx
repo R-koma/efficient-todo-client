@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { TodoType } from "../types";
 import Review from "../components/Review";
 import { API_URL } from "@/constants/url";
-import Link from "next/link";
 
 const ReviewPage = () => {
   const [reviews, setReviews] = useState([]);
@@ -75,11 +74,6 @@ const ReviewPage = () => {
           onDelete={handleDelete}
           onComplete={toggleTodoCompletion}
         />
-      </div>
-      <div>
-        {/* <Link href="/">
-          <h2 className="text-purple-800 font-bold">☞ TODO LIST</h2>
-        </Link> */}
       </div>
     </div>
   );
