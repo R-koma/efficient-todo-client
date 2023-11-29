@@ -17,21 +17,24 @@ const TodoPage = () => {
       return;
     }
 
-    const response = await fetch(`${API_URL}/createTodo`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: inputRef.current?.value,
-        isCompleted: false,
-      }),
-    });
-
-    if (response.ok) {
-      const newTodo = await response.json();
-      mutate([...todos, newTodo]);
-      if (inputRef.current?.value) {
-        inputRef.current.value = "";
+    try {
+      const response = await fetch(`${API_URL}/createTodo`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: inputRef.current?.value,
+          isCompleted: false,
+        }),
+      });
+      if (response.ok) {
+        const newTodo = await response.json();
+        mutate([...todos, newTodo]);
+        if (inputRef.current?.value) {
+          inputRef.current.value = "";
+        }
       }
+    } catch (err) {
+      console.log(err);
     }
   };
   return (
