@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TodoType } from "../types";
 import { useTodos } from "../hooks/useTodos";
 import { API_URL } from "@/constants/url";
+import { log } from "console";
 
 type TodoProps = {
   todo: TodoType;
@@ -16,45 +17,57 @@ const Todo = ({ todo }: TodoProps) => {
     setIsEditing(!isEditing);
 
     if (isEditing) {
-      const response = await fetch(`${API_URL}/editTodo/${todo.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: editedTitle }),
-      });
+      try {
+        const response = await fetch(`${API_URL}/editTodo/${todo.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: editedTitle }),
+        });
 
-      if (response.ok) {
-        const editedTodo = await response.json();
-        const updatedTodos = todos.map((todo: TodoType) =>
-          todo.id === editedTodo.id ? editedTodo : todo
-        );
-        mutate(updatedTodos);
+        if (response.ok) {
+          const editedTodo = await response.json();
+          const updatedTodos = todos.map((todo: TodoType) =>
+            todo.id === editedTodo.id ? editedTodo : todo
+          );
+          mutate(updatedTodos);
+        }
+      } catch (err) {
+        console.log("Error updating todo editing", err);
       }
     }
   };
 
   const handleDelete = async (id: number) => {
-    const response = await fetch(`${API_URL}/deleteTodo/${todo.id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const response = await fetch(`${API_URL}/deleteTodo/${todo.id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
 
-    if (response.ok) {
-      const updatedTodos = todos.filter((todo: TodoType) => todo.id !== id);
+      if (response.ok) {
+        const updatedTodos = todos.filter((todo: TodoType) => todo.id !== id);
 
-      mutate(updatedTodos);
+        mutate(updatedTodos);
+      }
+    } catch (err) {
+      console.log("Error updating todo deletion", err);
     }
   };
 
   const toggleTodoCompletion = async (id: number) => {
-    const response = await fetch(`${API_URL}/checkedTodo/${todo.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const response = await fetch(`${API_URL}/checkedTodo/${todo.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      });
 
-    if (response.ok) {
-      const checkedTodos = todos.filter((todo: TodoType) => todo.id !== id);
+      if (response.ok) {
+        const checkedTodos = todos.filter((todo: TodoType) => todo.id !== id);
 
-      mutate(checkedTodos);
+        mutate(checkedTodos);
+      }
+    } catch (err) {
+      console.log("Error updating todo completion", err);
     }
   };
 
