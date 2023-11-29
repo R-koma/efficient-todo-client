@@ -20,8 +20,8 @@ const ReviewPage = () => {
         }
         const data = await response.json();
         setReviews(data);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
+      } catch (err) {
+        console.error("Error fetching reviews:", err);
       }
     };
     fetchReviews();
@@ -32,15 +32,19 @@ const ReviewPage = () => {
   }, [reviews]);
 
   const handleDelete = async (id: number) => {
-    const response = await fetch(`${API_URL}/deleteReview/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const response = await fetch(`${API_URL}/deleteReview/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
 
-    if (response.ok) {
-      setReviews((prevReviews) =>
-        prevReviews.filter((review: TodoType) => review.id !== id)
-      );
+      if (response.ok) {
+        setReviews((prevReviews) =>
+          prevReviews.filter((review: TodoType) => review.id !== id)
+        );
+      }
+    } catch (err) {
+      console.log("Error updating review deletion", err);
     }
   };
 
@@ -57,8 +61,8 @@ const ReviewPage = () => {
       setReviews((prevReviews) =>
         prevReviews.filter((review: TodoType) => review.id !== id)
       );
-    } catch (error) {
-      console.error("Error updating todo completion:", error);
+    } catch (err) {
+      console.error("Error updating review completion:", err);
     }
   };
   return (

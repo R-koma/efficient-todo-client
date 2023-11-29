@@ -34,7 +34,7 @@ const TodoPage = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      console.log("Error creating todo", err);
     }
   };
   return (
