@@ -88,7 +88,7 @@ const Todo = ({ todo }: TodoProps) => {
               {isEditing ? (
                 <input
                   type="text"
-                  className="border rounded py-1 px-2"
+                  className="border-0 rounded py-1 px-2 bg-slate-800 focus:outline-none"
                   value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
                 />
